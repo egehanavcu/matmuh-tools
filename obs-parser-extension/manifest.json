@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "YTU OBS Ders İstatistik İndirici",
+  "version": "1.2",
+  "description": "OBS üzerindeki not istatistiklerini çeker ve JSON olarak indirir.",
+  "permissions": ["scripting"],
+  "host_permissions": ["*://obs.yildiz.edu.tr/*"],
+  "content_scripts": [
+    {
+      "matches": ["*://obs.yildiz.edu.tr/*"],
+      "js": ["content.js"],
+      "all_frames": true,
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": ["*://obs.yildiz.edu.tr/*"]
+    }
+  ]
+}
