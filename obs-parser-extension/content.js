@@ -49,180 +49,312 @@ if (
   document.body.appendChild(baslatButonu);
 }
 
-let tumVeriler = [];
+let dersVerileri = {};
+const eslesmeyenSinavAdlari = new Set();
+
+// OBS'deki tam öğretim elemanı adı -> bölüm kadrosundaki staffId.
+// Eşleşme yoksa instructor nesnesine staffId hiç eklenmez.
+// Örnek: "Doç.Dr. MELİH ÇINAR": "mcinar"
+const STAFF_ROSTER = {};
+
+const SEMESTER_MAP = { Güz: "FALL", Bahar: "SPRING", Yaz: "SUMMER" };
+const EVALUATION_METHOD_MAP = { Bağıl: "RELATIVE", Mutlak: "ABSOLUTE" };
+const EXAM_TYPE_MAP = {
+  "Ara Sınav": "MIDTERM_1",
+  "Ara Sınav 1": "MIDTERM_1",
+  "Ara Sınav1": "MIDTERM_1",
+  "Ara Sınav I": "MIDTERM_1",
+  "1. Vize": "MIDTERM_1",
+  "Ara Sınav2": "MIDTERM_2",
+  "Ara Sınav 2": "MIDTERM_2",
+  "Ara Sınav II": "MIDTERM_2",
+  "Vize Mazeret": "MIDTERM_1_MAKEUP",
+  "Vize 2 Mazeret": "MIDTERM_2_MAKEUP",
+  "Vize II Mazeret": "MIDTERM_2_MAKEUP",
+  Final: "FINAL",
+  "Yarıyıl Sonu Sınavı": "FINAL",
+  Bütünleme: "RESIT",
+  "Kısa Sınav": "QUIZ",
+  Ödev: "ASSIGNMENT",
+  Proje: "PROJECT",
+};
+
+function trSayi(metin) {
+  if (!metin) return null;
+  const temiz = metin.trim().replace(",", ".");
+  const sayi = parseFloat(temiz);
+  return isNaN(sayi) ? null : sayi;
+}
+
+function trTamsayi(metin) {
+  if (!metin) return null;
+  const eslesme = metin.trim().match(/^(\d+)/);
+  if (!eslesme) return null;
+  const sayi = parseInt(eslesme[1], 10);
+  return isNaN(sayi) ? null : sayi;
+}
+
+function trTarihToISO(dmy) {
+  const eslesme = (dmy || "").trim().match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+  if (!eslesme) return null;
+  const [, gun, ay, yil] = eslesme;
+  return `${yil}-${ay}-${gun}`;
+}
+
+function donemCozumle(donemAd) {
+  const eslesme = (donemAd || "").trim().match(/^(\d{4}-\d{4})\s+(.+)$/);
+  if (!eslesme) {
+    return { academicYear: donemAd || "", semester: donemAd || "" };
+  }
+  const academicYear = eslesme[1];
+  const mevsim = eslesme[2].trim();
+  return { academicYear, semester: SEMESTER_MAP[mevsim] || mevsim };
+}
+
+function instructorOlustur(rawName) {
+  if (!rawName) return undefined;
+  const instructor = { rawName };
+  const staffId = STAFF_ROSTER[rawName];
+  if (staffId) instructor.staffId = staffId;
+  return instructor;
+}
+
+function harfAraliklariCozumle(doc, tabloId) {
+  const tablo = doc.getElementById(tabloId);
+  if (!tablo) return [];
+
+  const satirlar = Array.from(tablo.querySelectorAll("tr")).slice(1);
+  const dagilim = [];
+
+  satirlar.forEach((satir) => {
+    const hucreler = satir.querySelectorAll("td");
+    if (hucreler.length < 4) return;
+    const letterGrade = hucreler[0].textContent.trim();
+    if (!letterGrade) return;
+
+    const minScore = trSayi(hucreler[1].textContent.trim());
+    const maxScore = trSayi(hucreler[2].textContent.trim());
+    const studentCount = trTamsayi(hucreler[3].textContent.trim());
+
+    dagilim.push({
+      letterGrade,
+      minScore,
+      maxScore,
+      studentCount: studentCount === null ? 0 : studentCount,
+    });
+  });
+
+  return dagilim;
+}
+
+function tabloKV(doc, tabloId) {
+  const tablo = doc.getElementById(tabloId);
+  const kv = {};
+  if (!tablo) return kv;
+
+  tablo.querySelectorAll("tr").forEach((satir) => {
+    const hucreler = satir.querySelectorAll("td");
+    if (hucreler.length === 2) {
+      const baslik = hucreler[0].textContent.replace(/\s+/g, " ").trim();
+      const deger = hucreler[1].textContent.replace(/\s+/g, " ").trim();
+      if (baslik) kv[baslik] = deger;
+    }
+  });
+
+  return kv;
+}
+
+function sonucCozumle(doc, istTabloId, notlarTabloId) {
+  const kv = tabloKV(doc, istTabloId);
+  if (Object.keys(kv).length === 0) return undefined;
+
+  const sonuc = {};
+
+  const degerlendirme = kv["Değerlendirme Şekli"];
+  if (degerlendirme) {
+    sonuc.evaluationMethod = EVALUATION_METHOD_MAP[degerlendirme] || degerlendirme;
+  }
+
+  const durum = kv["Sonuç Durumu"];
+  if (durum) sonuc.resultStatus = durum;
+
+  const tarih = trTarihToISO(kv["Sonuç Durum Tarihi"]);
+  if (tarih) sonuc.resultDate = tarih;
+
+  const mufredat = kv["Sınav Müfredat Adı"];
+  if (mufredat) sonuc.examCurriculumName = mufredat;
+
+  const katilimci = trTamsayi(kv["Sınava Katılan Öğrenci Sayısı"]);
+  if (katilimci !== null) sonuc.participantCount = katilimci;
+
+  const sinifOrt = trSayi(kv["Sınıf Ortalaması"]);
+  if (sinifOrt !== null) sonuc.classAverage = sinifOrt;
+
+  const sinifOrtKatilimci = trTamsayi(kv["Sınıf Ort.Katılan Öğr.Sayısı"]);
+  if (sinifOrtKatilimci !== null) {
+    sonuc.classAverageParticipantCount = sinifOrtKatilimci;
+  }
+
+  const stdSapma = trSayi(kv["Standart Sapma"]);
+  if (stdSapma !== null) sonuc.standardDeviation = stdSapma;
+
+  const sinifDuzeyi = kv["Sınıf Düzeyi"];
+  if (sinifDuzeyi) {
+    sonuc.classLevel = sinifDuzeyi.replace(/\s*\[.*?\]\s*$/, "").trim();
+  }
+
+  const araliklarDegisti = kv["Harf Aralıkları Değiştirildi"];
+  if (araliklarDegisti) {
+    sonuc.rangesChanged = araliklarDegisti === "Evet";
+  }
+
+  const gradeDistributions = harfAraliklariCozumle(doc, notlarTabloId);
+  if (gradeDistributions.length > 0) {
+    sonuc.gradeDistributions = gradeDistributions;
+  }
+
+  return Object.keys(sonuc).length > 0 ? sonuc : undefined;
+}
+
+function sinavlariCozumle(doc, tabloId) {
+  const tablo = doc.getElementById(tabloId);
+  if (!tablo) return [];
+
+  const sinavlar = [];
+  let aktif = null;
+
+  tablo.querySelectorAll("tr").forEach((satir) => {
+    const hucreler = satir.querySelectorAll("td");
+    if (hucreler.length < 2) return;
+
+    const baslikHucresi = hucreler[0];
+    const deger = hucreler[1].textContent.trim();
+    const bEtiketi = baslikHucresi.querySelector("b");
+
+    if (bEtiketi) {
+      const ad = bEtiketi.textContent.trim();
+      aktif = {};
+
+      const examType = EXAM_TYPE_MAP[ad];
+      if (examType) {
+        aktif.examType = examType;
+      } else {
+        eslesmeyenSinavAdlari.add(ad);
+      }
+      aktif.name = ad;
+
+      const hucreMetni = baslikHucresi.textContent;
+      const yuzdeEslesme = hucreMetni.match(/\(%(\d+)\)/);
+      if (yuzdeEslesme) aktif.weightPercent = parseInt(yuzdeEslesme[1], 10);
+
+      const ilanEslesme = hucreMetni.match(
+        /İlan Edildi:(\d{2}\.\d{2}\.\d{4})\s+(\d{2}:\d{2})/,
+      );
+      if (ilanEslesme) {
+        const isoTarih = trTarihToISO(ilanEslesme[1]);
+        if (isoTarih) aktif.announcedAt = `${isoTarih}T${ilanEslesme[2]}:00`;
+      }
+
+      sinavlar.push(aktif);
+    } else if (aktif) {
+      const metrikAdi = baslikHucresi.textContent.trim();
+      if (metrikAdi === "Sınav listesinde yer alan toplam öğrenci sayısı") {
+        const sayi = trTamsayi(deger);
+        if (sayi !== null) aktif.totalStudentCount = sayi;
+      } else if (metrikAdi === "Sınava giren öğrenci sayısı") {
+        const sayi = trTamsayi(deger);
+        if (sayi !== null) aktif.attendedStudentCount = sayi;
+      } else if (metrikAdi === "Sınava girmeyen öğrenci sayısı") {
+        const sayi = trTamsayi(deger);
+        if (sayi !== null) aktif.absentStudentCount = sayi;
+      } else if (
+        metrikAdi === "Sınavda Devamsızlıktan Kaldı seçilen öğrenci sayısı"
+      ) {
+        const sayi = trTamsayi(deger);
+        if (sayi !== null) aktif.failedByAbsenceCount = sayi;
+      } else if (metrikAdi === "Sınava giren öğrencilerin not ortalaması") {
+        const sayi = trSayi(deger);
+        if (sayi !== null) aktif.averageScore = sayi;
+      }
+    }
+  });
+
+  return sinavlar;
+}
 
 window.addEventListener("message", (event) => {
   if (event.source !== window || !event.data) return;
 
   if (event.data.type === "OBS_STAT_RESPONSE") {
     const htmlString = event.data.data;
-    const index = event.data.index;
     const donemAd = event.data.donemAd;
+    const subeNo = event.data.subeNo;
 
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, "text/html");
 
-    const istatistikVerisi = {
-      donem: donemAd,
-      fakulteProgram: "",
-      dersKodu: "",
-      dersAdi: "",
-      ogretimElemani: "",
-      harfNotlari: {},
-      butunlemeHarfNotlari: {},
-      finalStandartSapma: null,
-      butunlemeStandartSapma: null,
-      sinavIstatistikleri: {},
-    };
+    let code = "";
+    let name = "";
+    let profName = "";
 
     const dersTablosu = doc.getElementById("grdDers");
     if (dersTablosu) {
-      const satirlar = dersTablosu.querySelectorAll("tr");
-      satirlar.forEach((satir) => {
+      dersTablosu.querySelectorAll("tr").forEach((satir) => {
         const hucreler = satir.querySelectorAll("td");
         if (hucreler.length === 2) {
           const baslik = hucreler[0].textContent.trim();
           const deger = hucreler[1].textContent.trim();
-          if (baslik === "Fakülte Program")
-            istatistikVerisi.fakulteProgram = deger;
-          if (baslik === "Ders Kodu") istatistikVerisi.dersKodu = deger;
-          if (baslik === "Ders Adı") istatistikVerisi.dersAdi = deger;
-          if (baslik === "Öğretim Elemanı")
-            istatistikVerisi.ogretimElemani = deger;
+          if (baslik === "Ders Kodu") code = deger;
+          if (baslik === "Ders Adı") name = deger;
+          if (baslik === "Öğretim Elemanı") profName = deger;
         }
       });
     }
 
-    const harfTablosuCozumle = (tabloId, hedefObje) => {
-      const tablo = doc.getElementById(tabloId);
-      if (!tablo) return;
-
-      const satirlar = tablo.querySelectorAll("tr");
-      let hbnBasIndex = -1;
-      let hbnBitIndex = -1;
-
-      if (satirlar.length > 0) {
-        const basliklar = satirlar[0].querySelectorAll("th, td");
-        basliklar.forEach((hucre, idx) => {
-          const text = hucre.textContent.trim();
-          if (text === "Hbn Baş.") hbnBasIndex = idx;
-          if (text === "Hbn Bit.") hbnBitIndex = idx;
-        });
-      }
-
-      satirlar.forEach((satir, i) => {
-        if (i > 0) {
-          const hucreler = satir.querySelectorAll("td");
-          if (hucreler.length >= 4) {
-            const harf = hucreler[0].textContent.trim();
-
-            if (/^[A-Z]{2}|F0$/.test(harf)) {
-              const ogrSayisiHucresi = hucreler[hucreler.length - 2];
-
-              const veri = {
-                baslangic: hucreler[1] ? hucreler[1].textContent.trim() : "",
-                bitis: hucreler[2] ? hucreler[2].textContent.trim() : "",
-                ogrenciSayisi: ogrSayisiHucresi
-                  ? ogrSayisiHucresi.textContent.trim()
-                  : "",
-              };
-
-              if (hbnBasIndex !== -1 && hucreler[hbnBasIndex]) {
-                veri.hbnBaslangic = hucreler[hbnBasIndex].textContent.trim();
-              }
-              if (hbnBitIndex !== -1 && hucreler[hbnBitIndex]) {
-                veri.hbnBitis = hucreler[hbnBitIndex].textContent.trim();
-              }
-
-              hedefObje[harf] = veri;
-            }
-          }
-        }
-      });
-    };
-
-    harfTablosuCozumle("grdNotlar", istatistikVerisi.harfNotlari);
-    harfTablosuCozumle("grdNotlarBut", istatistikVerisi.butunlemeHarfNotlari);
-
-    const finalIstTablosu = doc.getElementById("grdIst");
-    if (finalIstTablosu) {
-      const satirlar = finalIstTablosu.querySelectorAll("tr");
-      satirlar.forEach((satir) => {
-        const hucreler = satir.querySelectorAll("td");
-        if (hucreler.length === 2) {
-          const baslik = hucreler[0].textContent.replace(/\n/g, "").trim();
-          if (baslik === "Standart Sapma") {
-            istatistikVerisi.finalStandartSapma =
-              hucreler[1].textContent.trim();
-          }
-        }
-      });
+    if (!code) {
+      console.warn("⚠️ Ders kodu bulunamadı, bu kayıt atlanıyor.");
+      return;
     }
 
-    const butIstTablosu = doc.getElementById("grdIstBut");
-    if (butIstTablosu) {
-      const satirlar = butIstTablosu.querySelectorAll("tr");
-      satirlar.forEach((satir) => {
-        const hucreler = satir.querySelectorAll("td");
-        if (hucreler.length === 2) {
-          const baslik = hucreler[0].textContent.replace(/\n/g, "").trim();
-          if (baslik === "Standart Sapma") {
-            istatistikVerisi.butunlemeStandartSapma =
-              hucreler[1].textContent.trim();
-          }
-        }
-      });
+    const { academicYear, semester } = donemCozumle(donemAd);
+    const groupNumber = trTamsayi(subeNo);
+
+    const offering = { academicYear, semester };
+    if (groupNumber !== null) offering.groupNumber = groupNumber;
+
+    const instructor = instructorOlustur(profName);
+    if (instructor) offering.instructor = instructor;
+
+    const finalResult = sonucCozumle(doc, "grdIst", "grdNotlar");
+    if (finalResult) offering.finalResult = finalResult;
+
+    const butResult = sonucCozumle(doc, "grdIstBut", "grdNotlarBut");
+    if (butResult) offering.butResult = butResult;
+
+    const examStatistics = sinavlariCozumle(doc, "grdIstSnv");
+    if (examStatistics.length > 0) offering.examStatistics = examStatistics;
+
+    if (!dersVerileri[code]) {
+      dersVerileri[code] = { code, name, offerings: [] };
     }
+    dersVerileri[code].offerings.push(offering);
 
-    const sinavTablosu = doc.getElementById("grdIstSnv");
-    if (sinavTablosu) {
-      let aktifSinav = null;
-      const satirlar = sinavTablosu.querySelectorAll("tr");
-
-      satirlar.forEach((satir) => {
-        const hucreler = satir.querySelectorAll("td");
-        if (hucreler.length >= 2) {
-          const baslikHucresi = hucreler[0];
-          const deger = hucreler[1].textContent.trim();
-
-          const bEtiketi = baslikHucresi.querySelector("b");
-          if (bEtiketi) {
-            aktifSinav = bEtiketi.textContent.trim();
-            istatistikVerisi.sinavIstatistikleri[aktifSinav] = {};
-
-            const hucreMetni = baslikHucresi.textContent;
-            const yuzdeEslesme = hucreMetni.match(/\((%\d+)\)/);
-            if (yuzdeEslesme && yuzdeEslesme[1]) {
-              istatistikVerisi.sinavIstatistikleri[aktifSinav]["Etki Yüzdesi"] =
-                yuzdeEslesme[1];
-            }
-          } else if (aktifSinav) {
-            const metrikAdi = baslikHucresi.textContent.trim();
-            if (metrikAdi) {
-              istatistikVerisi.sinavIstatistikleri[aktifSinav][metrikAdi] =
-                deger;
-            }
-          }
-        }
-      });
-    }
-
-    const hasHarfNotlari = Object.keys(istatistikVerisi.harfNotlari).length > 0;
-    const hasSinavIstatistikleri =
-      Object.keys(istatistikVerisi.sinavIstatistikleri).length > 0;
-
-    if (hasHarfNotlari || hasSinavIstatistikleri) {
-      tumVeriler.push(istatistikVerisi);
-      console.log(
-        `✅ [${istatistikVerisi.donem}] ${istatistikVerisi.dersAdi} eklendi. ${hbnBasIndex !== -1 ? "(HBN Tespit Edildi)" : ""}`,
-      );
-    }
+    console.log(`✅ [${donemAd}] ${code} (Şb ${subeNo}) eklendi.`);
   }
 
   if (
     event.data.type === "OBS_SCRAPE_COMPLETE" ||
     event.data.type === "OBS_SCRAPE_ERROR"
   ) {
+    const tumVeriler = Object.values(dersVerileri);
+
+    if (eslesmeyenSinavAdlari.size > 0) {
+      console.warn(
+        "⚠️ examType eşleşmesi bulunamayan sınav adları (sadece 'name' ile kaydedildi):",
+        Array.from(eslesmeyenSinavAdlari).join(", "),
+      );
+    }
+
     if (tumVeriler.length > 0) {
       const jsonString = JSON.stringify(tumVeriler, null, 4);
       const blob = new Blob([jsonString], { type: "application/json" });
