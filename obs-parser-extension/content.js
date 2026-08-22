@@ -50,45 +50,58 @@ if (
 }
 
 let dersVerileri = {};
-const eslesmeyenSinavAdlari = new Set();
-
-// OBS'deki tam öğretim elemanı adı -> bölüm kadrosundaki staffId.
-// Eşleşme yoksa instructor nesnesine staffId hiç eklenmez.
-// Örnek: "Doç.Dr. MELİH ÇINAR": "mcinar"
-const STAFF_ROSTER = {};
+let eslesmeyenSinavAdlari = new Set();
 
 const SEMESTER_MAP = { Güz: "FALL", Bahar: "SPRING", Yaz: "SUMMER" };
-const EVALUATION_METHOD_MAP = { Bağıl: "RELATIVE", Mutlak: "ABSOLUTE" };
-const EXAM_TYPE_MAP = {
-  "Ara Sınav": "MIDTERM_1",
-  "Ara Sınav 1": "MIDTERM_1",
-  "Ara Sınav1": "MIDTERM_1",
-  "Ara Sınav I": "MIDTERM_1",
-  "1. Vize": "MIDTERM_1",
-  "Ara Sınav2": "MIDTERM_2",
-  "Ara Sınav 2": "MIDTERM_2",
-  "Ara Sınav II": "MIDTERM_2",
-  "Vize Mazeret": "MIDTERM_1_MAKEUP",
-  "Vize 2 Mazeret": "MIDTERM_2_MAKEUP",
-  "Vize II Mazeret": "MIDTERM_2_MAKEUP",
-  Final: "FINAL",
-  "Yarıyıl Sonu Sınavı": "FINAL",
-  Bütünleme: "RESIT",
-  "Kısa Sınav": "QUIZ",
-  Ödev: "ASSIGNMENT",
-  Proje: "PROJECT",
+const EVALUATION_METHOD_MAP = {
+  Bağıl: "RELATIVE",
+  Mutlak: "ABSOLUTE",
+  Manuel: "MANUAL",
 };
+
+const EXAM_TYPES = [
+  [
+    /mazeret/i,
+    [
+      [/\b(2|II)\b/, "MIDTERM_2_MAKEUP"],
+      [/.*/, "MIDTERM_1_MAKEUP"],
+    ],
+  ],
+  [/bütünleme|butunleme/i, [[/.*/, "RESIT"]]],
+  [/final|yarıyıl sonu|yılsonu/i, [[/.*/, "FINAL"]]],
+  [
+    /ara\s*sınav|arasınav|vize/i,
+    [
+      [/2|II/, "MIDTERM_2"],
+      [/.*/, "MIDTERM_1"],
+    ],
+  ],
+  [/kısa\s*sınav|quiz/i, [[/.*/, "QUIZ"]]],
+  [/ödev|odev/i, [[/.*/, "ASSIGNMENT"]]],
+  [/proje/i, [[/.*/, "PROJECT"]]],
+];
+
+function examTypeOf(name) {
+  for (const [matcher, variants] of EXAM_TYPES) {
+    if (!matcher.test(name)) continue;
+    for (const [variant, type] of variants) {
+      if (variant.test(name)) return type;
+    }
+  }
+  return null;
+}
 
 function trSayi(metin) {
   if (!metin) return null;
-  const temiz = metin.trim().replace(",", ".");
+  const temiz = metin.trim().replace(/\./g, "").replace(",", ".");
   const sayi = parseFloat(temiz);
   return isNaN(sayi) ? null : sayi;
 }
 
 function trTamsayi(metin) {
   if (!metin) return null;
-  const eslesme = metin.trim().match(/^(\d+)/);
+  const temiz = metin.trim().replace(/\./g, "");
+  const eslesme = temiz.match(/^(\d+)/);
   if (!eslesme) return null;
   const sayi = parseInt(eslesme[1], 10);
   return isNaN(sayi) ? null : sayi;
@@ -104,19 +117,16 @@ function trTarihToISO(dmy) {
 function donemCozumle(donemAd) {
   const eslesme = (donemAd || "").trim().match(/^(\d{4}-\d{4})\s+(.+)$/);
   if (!eslesme) {
-    return { academicYear: donemAd || "", semester: donemAd || "" };
+    return { academicYear: donemAd || "", semester: null };
   }
   const academicYear = eslesme[1];
   const mevsim = eslesme[2].trim();
-  return { academicYear, semester: SEMESTER_MAP[mevsim] || mevsim };
+  return { academicYear, semester: SEMESTER_MAP[mevsim] || null };
 }
 
 function instructorOlustur(rawName) {
   if (!rawName) return undefined;
-  const instructor = { rawName };
-  const staffId = STAFF_ROSTER[rawName];
-  if (staffId) instructor.staffId = staffId;
-  return instructor;
+  return { rawName };
 }
 
 function harfAraliklariCozumle(doc, tabloId) {
@@ -129,12 +139,21 @@ function harfAraliklariCozumle(doc, tabloId) {
   satirlar.forEach((satir) => {
     const hucreler = satir.querySelectorAll("td");
     if (hucreler.length < 4) return;
+
     const letterGrade = hucreler[0].textContent.trim();
-    if (!letterGrade) return;
+    if (!/^([A-Z]{2}|F0)$/.test(letterGrade)) return;
 
     const minScore = trSayi(hucreler[1].textContent.trim());
     const maxScore = trSayi(hucreler[2].textContent.trim());
-    const studentCount = trTamsayi(hucreler[3].textContent.trim());
+
+    let studentCount = null;
+    for (let i = hucreler.length - 1; i >= 0; i--) {
+      const metin = hucreler[i].textContent.trim();
+      if (/^\d+$/.test(metin)) {
+        studentCount = parseInt(metin, 10);
+        break;
+      }
+    }
 
     dagilim.push({
       letterGrade,
@@ -235,7 +254,7 @@ function sinavlariCozumle(doc, tabloId) {
       const ad = bEtiketi.textContent.trim();
       aktif = {};
 
-      const examType = EXAM_TYPE_MAP[ad];
+      const examType = examTypeOf(ad);
       if (examType) {
         aktif.examType = examType;
       } else {
@@ -284,6 +303,12 @@ function sinavlariCozumle(doc, tabloId) {
 
 window.addEventListener("message", (event) => {
   if (event.source !== window || !event.data) return;
+
+  if (event.data.type === "START_SCRAPING") {
+    dersVerileri = {};
+    eslesmeyenSinavAdlari = new Set();
+    return;
+  }
 
   if (event.data.type === "OBS_STAT_RESPONSE") {
     const htmlString = event.data.data;
