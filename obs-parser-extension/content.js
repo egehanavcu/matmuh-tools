@@ -91,6 +91,30 @@ function examTypeOf(name) {
   return null;
 }
 
+// OBS bazı derslerde ikinci ara sınavın mazeretini de birinciyle aynı adla
+// ("Vize Mazeret") gösteriyor; isimden examType ayırt edilemiyor. Aynı tür
+// tabloda ikinci kez çıkarsa (aynı ad, aynı regex sonucu), sıradaki muadiline
+// kaydırıyoruz — tablodaki sıra, ilgili sınavların sırasını yansıtıyor.
+const EXAM_TYPE_ESLESI = {
+  MIDTERM_1: "MIDTERM_2",
+  MIDTERM_1_MAKEUP: "MIDTERM_2_MAKEUP",
+};
+
+function benzersizTurAta(ad, kullanilanTurler) {
+  let tur = examTypeOf(ad);
+  if (!tur) return null;
+
+  while (kullanilanTurler.has(tur)) {
+    const esi = EXAM_TYPE_ESLESI[tur];
+    if (!esi || kullanilanTurler.has(esi)) {
+      return null;
+    }
+    tur = esi;
+  }
+
+  return tur;
+}
+
 function trSayi(metin) {
   if (!metin) return null;
   const temiz = metin.trim().replace(/\./g, "").replace(",", ".");
@@ -240,6 +264,7 @@ function sinavlariCozumle(doc, tabloId) {
   if (!tablo) return [];
 
   const sinavlar = [];
+  const kullanilanTurler = new Set();
   let aktif = null;
 
   tablo.querySelectorAll("tr").forEach((satir) => {
@@ -254,8 +279,9 @@ function sinavlariCozumle(doc, tabloId) {
       const ad = bEtiketi.textContent.trim();
       aktif = {};
 
-      const examType = examTypeOf(ad);
+      const examType = benzersizTurAta(ad, kullanilanTurler);
       if (examType) {
+        kullanilanTurler.add(examType);
         aktif.examType = examType;
       } else {
         eslesmeyenSinavAdlari.add(ad);
