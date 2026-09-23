@@ -9,7 +9,6 @@ INBOX = ROOT / "temp"
 
 KINDS = {
     "academic-calendar": "YTÜ akademik takvimi (Excel)",
-    "weekly-schedule": "Bölüm haftalık ders programı (PDF)",
 }
 
 
@@ -53,19 +52,9 @@ def xlsx_text(path: Path) -> str:
     return "\n".join(out)
 
 
-def pdf_text(path: Path) -> str:
-    import pdfplumber
-
-    with pdfplumber.open(path) as pdf:
-        return "\n".join(page.extract_text() or "" for page in pdf.pages)
-
-
 def classify(text: str, suffix: str) -> str | None:
-    upper = text.upper()
-    if suffix in (".xlsx", ".xlsm") and "AKADEMİK TAKVİM" in upper:
+    if suffix in (".xlsx", ".xlsm") and "AKADEMİK TAKVİM" in text.upper():
         return "academic-calendar"
-    if suffix == ".pdf" and "SAAT" in upper and "SINIF" in upper:
-        return "weekly-schedule"
     return None
 
 
@@ -77,12 +66,9 @@ def scan() -> list[InboxFile]:
         suffix = path.suffix.lower()
         if not path.is_file() or path.name.startswith(("~$", ".")):
             continue
-        if suffix in (".xlsx", ".xlsm"):
-            text = xlsx_text(path)
-        elif suffix == ".pdf":
-            text = pdf_text(path)
-        else:
+        if suffix not in (".xlsx", ".xlsm"):
             continue
+        text = xlsx_text(path)
         files.append(InboxFile(path, classify(text, suffix), sha256_of(path), text))
     return files
 
