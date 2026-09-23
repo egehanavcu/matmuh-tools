@@ -1,0 +1,40 @@
+listeler çekiliyor…
+  announcements  486 kayıt (numara 63–1081)
+  news           12 kayıt (numara 5–19)
+ana sayfa: 18 tarihli bağlantı
+wayback…
+  tamam; 130 kopya, 1294 tarihli bağlantı
+
+announcements
+  total            486
+  homepage         9
+  wayback          359
+  backup           2
+  interpolated     32
+  interpolatedWithTerm 55
+  termOnly         4
+  exactNotAnchor   42
+  termMismatch     4
+  unknown          24
+  conflicts        27
+  reusedId         35
+  outOfOrder       1
+  unmatchedBackup  4
+
+news
+  total            12
+  homepage         9
+  wayback          3
+  backup           0
+  interpolated     0
+  interpolatedWithTerm 0
+  termOnly         0
+  exactNotAnchor   2
+  termMismatch     0
+  unknown          0
+  conflicts        8
+  reusedId         1
+  outOfOrder       0
+  unmatchedBackup  4
+
+yazıldı: docs\bot-data\announcement-dates.json

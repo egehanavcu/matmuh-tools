@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.scrapy/
+secrets/
+state.json
+schemas/
+snapshots/
+raw/
+data/
+reports/
+logs/
+sources/wayback/
+temp/
+httpcache/

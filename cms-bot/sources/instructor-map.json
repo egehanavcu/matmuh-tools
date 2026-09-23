@@ -1,0 +1,482 @@
+{
+ "Arş.Gör. CEMRE YAZ DEMİRCİOĞLU": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Arş.Gör.Dr. BETÜL ÖZKAN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Arş.Gör.Dr. HANDENUR ESEN": {
+  "slug": "handenur-esen",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Arş.Gör.Dr. Hayati Ünsal ÖZER": {
+  "slug": "hayati-unsal-ozer",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Arş.Gör.Dr. İLKAY KURT": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. Atıf Ahmet EVREN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. BAYRAM ALİ İBRAHİMOĞLU": {
+  "slug": "bayram-ali-ibrahimoglu",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Doç.Dr. Betül DUMAN BAY": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. BİROL ASLANYÜREK": {
+  "slug": "birol-aslanyurek",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Doç.Dr. Emre KOLOTOĞLU": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. FATİH İLHAN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. Gürdal KANAT": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. KEREM KARAOSMANOĞLU": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. Kadiriye ŞİMŞEK ALAN": {
+  "slug": "kadriye-simsek-alan",
+  "source": "ai",
+  "note": "İsimdeki harf varyasyonuna (Kadiriye/Kadriye) rağmen unvan ve tam soyadı uyuşmaktadır."
+ },
+ "Doç.Dr. MELİH ÇINAR": {
+  "slug": "melih-cinar",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Doç.Dr. Müslüm ÖZIŞIK": {
+  "slug": "muslum-ozisik",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Doç.Dr. Nilgün GÜLER BAYAZIT": {
+  "slug": "nilgun-guler-bayazit",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Doç.Dr. RAMAZAN TEKERCİOĞLU": {
+  "slug": "ramazan-tekercioglu",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Doç.Dr. SEDA GÖKTEPE KÖRPEOĞLU": {
+  "slug": "seda-goktepe-korpeoglu",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Doç.Dr. SERKAN ONAR": {
+  "slug": "serkan-onar",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Doç.Dr. Setenay Nil DOĞAN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. Songül DEMİR": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. Sırrı Emrah ÜÇER": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. YAVUZ EREN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. Ömer APAYDIN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Doç.Dr. Şerif ESENDEMİR": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Dr. ESRA ÇELİK": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Dr.Öğretim Üyesi BURÇİN ÖZBAY KISASÖZ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Dr.Öğretim Üyesi CANAN YAĞMUR KARAKAŞ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Dr.Öğretim Üyesi DERYA SEKMAN": {
+  "slug": "derya-sekman",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Dr.Öğretim Üyesi FAHRİYE DİNÇER": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Dr.Öğretim Üyesi FATİH AYLIKCI": {
+  "slug": "fatih-aylikci",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Dr.Öğretim Üyesi MAHMUT BİLGETÜRK": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Dr.Öğretim Üyesi MUMİN TOLGA EMİRLER": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Dr.Öğretim Üyesi Macide CANTÜRK RODOP": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Dr.Öğretim Üyesi Mehmet YILMAZ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Dr.Öğretim Üyesi Mert BAL": {
+  "slug": "mert-bal",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Dr.Öğretim Üyesi TUGAY KARADAĞ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Gösterilmiyor": {
+  "slug": null,
+  "source": "ai",
+  "note": "Eğitmen adı belirtilmemiştir ve listede bulunmamaktadır."
+ },
+ "Prof. SERNAZ DEMİREL": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Atınç PIRTI": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Ayben KARASU": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Aydın SEÇER": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Prof.Dr. Ayla ŞAYLI": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Prof.Dr. BORA IŞILDAK": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Coşkun GÜLER": {
+  "slug": "coskun-guler",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Prof.Dr. FATİH TAŞÇİ": {
+  "slug": "fatih-tasci",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Prof.Dr. Fatma AYDIN AKGÜN": {
+  "slug": "fatma-aydin-akgun",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Prof.Dr. Fatma TUNÇ YAŞAR": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Fatma İnci ALBAYRAK": {
+  "slug": "inci-albayrak",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Prof.Dr. Hale KÖÇKEN": {
+  "slug": "hale-gonce-kocken",
+  "source": "kod",
+  "note": "soyadın bir kısmı tuttu"
+ },
+ "Prof.Dr. Hülya SERAB": {
+  "slug": "hulya-serab",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Prof.Dr. Kevser KÖKLÜ": {
+  "slug": "kevser-ozden-koklu",
+  "source": "kod",
+  "note": "soyadın bir kısmı tuttu"
+ },
+ "Prof.Dr. MEHMET BEŞİKÇİ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. MEHMET SAİT ÖZERVARLI": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Merih SERİN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Nazmiye YAHNİOĞLU": {
+  "slug": "nazmiye-yahnioglu",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Prof.Dr. Neşet TOKU": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Onur Güneş AYAS": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Osman Caner TASLAMAN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Reşat KÖŞKER": {
+  "slug": "resat-kosker",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Prof.Dr. Salim YÜCE": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Sevgi KOCAOBA": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Süleyman DOĞAN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Turhan ADA": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Yasemen UÇAN": {
+  "slug": "yasemen-ucan",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Prof.Dr. Yasemin KILINÇ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Prof.Dr. Yusuf YERLİ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Prof.Dr. Ülkü YEŞİL": {
+  "slug": "ulku-babuscu-yesil",
+  "source": "kod",
+  "note": "soyadın bir kısmı tuttu"
+ },
+ "Prof.Dr. İbrahim EMİROĞLU": {
+  "slug": "ibrahim-emiroglu",
+  "source": "kod",
+  "note": "ad ve soyad tuttu"
+ },
+ "Tanımsız MERVE AY KARAKUŞ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. Ahmet Selim AKBIYIK": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. Arzuhan KOCABAŞ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Öğr.Gör. BERİL EKER GÜMÜŞ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Öğr.Gör. DAMLA TEZEL YALKUT": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Öğr.Gör. Elif YILMAZ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. FETTAH KIRAN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. Fitnat YİĞİT": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. GÖKSEL KAYA": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. GÜLSEMA LÜYER": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Öğr.Gör. GÜLSÜM SONAL": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. Hilal TUFAN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Öğr.Gör. KADRİYE TUNA": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. Mahmut Zeki ERBAY": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. Maral HARİRİ AKBARİ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. NESLİHAN ERKAN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Öğr.Gör. Selçuk GÜL": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Öğr.Gör. Tülay VURAL": {
+  "slug": null,
+  "source": "ai",
+  "note": "Personel listesinde bulunmamaktadır."
+ },
+ "Öğr.Gör. ÇETİN ERDEM SONAL": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör. Şener GÜNAY": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör.Dr. BETÜL AYANOĞLU": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör.Dr. NİHAL ALTIOK": {
+  "slug": null,
+  "source": "ai",
+  "note": "Nihal Altıok personel listesinde bulunmamaktadır."
+ },
+ "Öğr.Gör.Dr. PELİN PELİT ARAYICI": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör.Dr. Yusuf ÖZ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğr.Gör.Dr. Şebnem GELMEDİ": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ },
+ "Öğretim Görevlisi (657/89.Madd SEBAHAT ÖZKAL ÇAĞLAYAN": {
+  "slug": null,
+  "source": "ai",
+  "note": "Bölüm personel listesinde yer almamaktadır."
+ }
+}

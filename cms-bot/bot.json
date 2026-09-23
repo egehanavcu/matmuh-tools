@@ -1,0 +1,5 @@
+{
+ "geminiModel": "gemini-3.8-flash",
+ "geminiFallbackModel": "gemini-3.5-flash",
+ "poolCourseDetails": true
+}
