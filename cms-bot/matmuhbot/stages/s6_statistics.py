@@ -19,7 +19,7 @@ SEMESTERS = {"guz": "FALL", "bahar": "SPRING", "yaz": "SUMMER"}
 LETTERS = {"AA", "BA", "BB", "CB", "CC", "DC", "DD", "FD", "FF", "F0"}
 METHODS = {"RELATIVE", "ABSOLUTE", "MANUAL"}
 EXAM_TYPES = {"MIDTERM_1", "MIDTERM_1_MAKEUP", "MIDTERM_2", "MIDTERM_2_MAKEUP",
-              "QUIZ", "ASSIGNMENT", "PROJECT", "FINAL", "RESIT"}
+              "QUIZ", "QUIZ_2", "ASSIGNMENT", "ASSIGNMENT_2", "PROJECT", "FINAL", "RESIT"}
 PLACEHOLDER_INSTRUCTORS = {"", UNKNOWN_INSTRUCTOR, "Gösterilmiyor", "Tanımsız"}
 RESULT_FIELDS = ("evaluationMethod", "resultStatus", "resultDate", "examCurriculumName", "participantCount",
                  "classAverage", "classAverageParticipantCount", "standardDeviation", "classLevel", "rangesChanged")
@@ -72,9 +72,9 @@ def exam_type(name: str) -> str | None:
     if "final" in text or "yariyil sonu" in text:
         return "FINAL"
     if "kisa sinav" in text or "quiz" in text:
-        return "QUIZ"
+        return "QUIZ_2" if second else "QUIZ"
     if "odev" in text:
-        return "ASSIGNMENT"
+        return "ASSIGNMENT_2" if second else "ASSIGNMENT"
     if "proje" in text:
         return "PROJECT"
     if "mazeret" in text:
