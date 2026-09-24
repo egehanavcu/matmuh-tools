@@ -1,14 +1,16 @@
 # matmuh koleksiyon doldurma botu — veri sözleşmesi
 
-Bu belge, matmuh.yildiz.edu.tr sitesinin CMS koleksiyonlarını dış kaynaklardan
-dolduracak botu yazan ve yöneten kişi (ya da Claude oturumu) içindir. Botun
-**neyi, hangi biçimde, hangi sırayla** yazması gerektiğini ve sitenin bu veriyi
-nasıl kullandığını anlatır.
+Doğrulandığı an: **2026-09-22**. Kaynak: backend v1.7.0 (`6bdd403`), canlı API
+ve frontend `52c6506`. Şema sonradan değişmiş olabilir; bot her çalıştığında
+şemayı canlıdan okumalı (bkz. §1.3) ve bu belgeyle çelişirse **canlı şema
+kazanır**.
 
-Doğrulandığı an: **2026-09-22**. Kaynak: backend `ytumatmuh/matmuhbackend`
-v1.7.0 (`6bdd403`), canlı API ve frontend `52c6506`. Şema sonradan değişmiş olabilir;
-bot her çalıştığında şemayı canlıdan okumalı (bkz. §1.3) ve bu belgeyle
-çelişirse **canlı şema kazanır**.
+Depolar (2026-09-24'te güncellendi, ikisi de taşındı):
+
+| | |
+| --- | --- |
+| Backend | <https://github.com/ytumatmuh/matmuh-backend> |
+| Frontend | <https://github.com/ytumatmuh/matmuh-frontend> |
 
 ---
 
@@ -653,9 +655,16 @@ dağılımı `minScore`'a göre azalan sıralıyor, aralıksızları sona koyuyo
 | `failedByAbsenceCount` | int | ≥0 |
 | `averageScore` | decimal | |
 
-Sınav türleri (`examType`): `MIDTERM_1`, `MIDTERM_1_MAKEUP`, `MIDTERM_2`,
-`MIDTERM_2_MAKEUP`, `QUIZ`, `ASSIGNMENT`, `PROJECT`, `FINAL`, `RESIT`. Bir açılışta
-her tür bir kez. Sitede ad türden üretiliyor, kaynaktaki ad saklanmıyor.
+Sınav türleri (`examType`): `MIDTERM_1`, `MIDTERM_2`, `MIDTERM_1_MAKEUP`,
+`MIDTERM_2_MAKEUP`, `FINAL`, `RESIT`, `QUIZ`, `QUIZ_2`, `ASSIGNMENT`,
+`ASSIGNMENT_2`, `PROJECT`. Bir açılışta her tür bir kez. Sitede ad türden
+üretiliyor, kaynaktaki ad saklanmıyor.
+
+`QUIZ_2` ve `ASSIGNMENT_2` 2026-09-24'te backend'e eklendi: OBS'te aynı şubede
+iki ayrı ödev olabiliyor ve ikisinin de kendi ağırlığı, giren sayısı ve
+ortalaması var (2023-2024 Bahar MTM1552 Gr.1: "Ödev 1" %15, "Ödev2" %15;
+2025-2026 Bahar MTM3662 Gr.1: "Ödev" %5, "Ödev2" %5). Öncesinde ikincisi
+yazılamıyordu.
 
 OBS'teki adlar bu türlere şöyle düşüyordu (aynı tür 6 farklı adla geçiyor):
 
@@ -668,7 +677,9 @@ OBS'teki adlar bu türlere şöyle düşüyordu (aynı tür 6 farklı adla geçi
 | Final, Yarıyıl Sonu Sınavı | `FINAL` |
 | Bütünleme | `RESIT` |
 | Kısa Sınav | `QUIZ` |
-| Ödev | `ASSIGNMENT` |
+| Kısa Sınav 2 | `QUIZ_2` |
+| Ödev, Ödev 1 | `ASSIGNMENT` |
+| Ödev 2, Ödev2 | `ASSIGNMENT_2` |
 | Proje | `PROJECT` |
 
 "Ara Sınav Mazeret" hem 1. hem 2. vizenin mazereti için kullanılmış; bağlama göre
@@ -1065,7 +1076,9 @@ olduğu için geri verildi.
   kazanır, eksik alanlarını sonrakiler tamamlar, aynı alan farklıysa rapora
   düşer.
 - **Sınav adları** §3.4'teki türlere kodla eşlenir; eşleşmeyen ad yazılmaz,
-  rapora düşer. Aynı türe iki sınav düşerse ilki kalır ("Ödev" + "Ödev2").
+  rapora düşer. Adda `2` ya da `II` varsa ikinci tür seçilir ("Ödev2" →
+  `ASSIGNMENT_2`). Aynı türe yine de iki sınav düşerse önce ilan edilen kalır,
+  diğerinin ağırlığı ve ortalaması rapora yazılır.
 - Satırlarda **`scheduleSlots` gönderilmez** (`[]` değil, alanın kendisi yok).
 - Eğitmen alanları her satırda üzerine yazıldığı için: açılış canlıda varsa
   **canlıdaki eğitmen aynen geri gönderilir**; kaynak başka birini söylüyorsa
@@ -1530,7 +1543,8 @@ Bot düzeltebilir ya da en azından bozmamalı:
 | Duyuru ve haberler | Bölümün eski sitesi `https://mtm.yildiz.edu.tr` (dosyalar `/media/…` altında); ayrıntı §4.4 aşama 7 ve 8. Yayın tarihleri `sources/announcement-dates.json`'da. İngilizce bölümü (`/en`) 2020'den beri güncel değil; çeviri için kaynak alınmaz (§4.7) |
 
 **Referans veri olarak frontend git geçmişi.** Göç öncesi yerel tablolar
-silindi ama geçmişte duruyor (frontend deposunda):
+silindi ama geçmişte duruyor; frontend deposunda
+(<https://github.com/ytumatmuh/matmuh-frontend>) şu komutlarla okunur:
 
 ```bash
 git show 8b1357f~1:src/data/coursesData.js          # 125 ders, 8 yarıyıl, 14 slot
